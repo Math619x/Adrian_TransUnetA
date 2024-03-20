@@ -1,0 +1,13 @@
+numpy==1.19.2
+torchvision==0.8.1
+tqdm==4.49.0
+torch==1.7.0
+einops==0.3.0
+easydict==1.9
+opencv_python==4.4.0.42
+
+
+python main.py --mode train --model_path /home/graciela/Adrian/TransUnet/transunet_pytorch/model/model1.pth --train_path /home/graciela/Adrian/TransUnet/transunet_pytorch/trainset --test_path /home/graciela/Adrian/TransUnet/transunet_pytorch/testset
+
+
+python main.py --mode inference --model_path /home/graciela/Adrian/TransUnet/transunet_pytorch/model/model1.pth --image_path /home/graciela/MCTrans/data/medical/pannuke/split-images-npy/2/subj_31slice_15.npy
