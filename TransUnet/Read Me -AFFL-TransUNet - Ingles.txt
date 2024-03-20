@@ -1,0 +1,117 @@
+The following GitHub repository was used as a base: https://github.com/mkara44/transunet_pytorch/tree/main
+
+First, ensure you have the Python version: 
+Python 3.6+
+
+Install the requirements in the following .txt file in your virtual environment:
+pip install -r requirements_fftransunet.txt
+
+At the following locations:
+../transunet_pytorch/trainset/img
+../transunet_pytorch/trainset/mask
+Place the images in .npy format, for each image (the name of the images doesn't matter,
+they just need to correspond with their segmented mask).
+
+Example of one image in each folder corresponding to its mask:
+../transunet_pytorch/trainset/img/subj_1slice_11.npy
+../transunet_pytorch/trainset/mask/subj_1slice_11.npy
+
+Similarly, at the following location:
+../transunet_pytorch/testset/img/subj_31slice_11.npy
+../transunet_pytorch/testset/mask/subj_31slice_11.npy
+Place the images for testing.
+
+NOTE: All images should be placed in these folders, not in subfolders.
+--------------------------------------------------------------------------------
+
+Create a folder at the following location:
+../transunet_pytorch/model/
+Where the .pth model and a .csv file will be saved, containing data
+for plotting graphs with epoch-wise history of evaluated metrics
+and loss.
+
+--------------------------------------------------------------------------------
+Create a folder at the following location:
+../transunet_pytorch/results/
+Where the images generated in the model will be saved.
+
+--------------------------------------------------------------------------------
+
+Before running the model, verify that the images have the correct dimensions,
+in this case, the images are 256x256, in 3 channels (RGB).
+Otherwise, adjust this in the file located at:
+
+../transunet_pytorch/config.py
+
+Where we can adjust the input image dimension, as well as parameters, such as:
+
+Batch_size
+Epoch
+Learning_rate
+in_channels (input channels, in this case, 3)
+out_channels (output channels)
+head_num (Attention heads in the transformer layer)
+mlp_dim (dimension of Multi-layer perceptron of the transformer)
+block_num (transformer blocks)
+class_num (classes used in the images including the image background)
+
+NOTE: In the file, the same parameters are shown twice, with the
+second being the original ones that came in the file, and the first ones are
+those used for the FF-TransUnet experiment.
+--------------------------------------------------------------------------------
+
+In the file at the following address:
+
+../transunet_pytorch/fuzzy_control.py
+
+All the fuzzy control implemented for modifying the
+alpha parameter is found, which is responsible for the weight given to each class to
+focus on classes with fewer data and therefore are more difficult to
+segment.
+
+The ranges of the 2 inputs taken for this experiment can be adjusted.
+The 2 inputs are:
+1)class_sizes
+2)focal_delta
+
+Where 1) is defined in the range from 0 to 1, that is, the size of each class,
+relative to the total. For this case, it is a fixed value since we always have
+the same class size as long as we use the same images. But if different images are used,
+either from another database, or by doing cross-fold, the total number of pixels must be calculated, and the total number of pixels belonging to each class,
+to obtain the size of each class.
+
+In 2), the difference between the loss in epoch "n" and the loss in the
+epoch "n-1" is calculated. To obtain the range, several experiments were conducted to observe the ranges in which that difference is found. So its range is defined
+between -0.3 and 0.35.
+
+The system output will provide an adjustment of alpha between the ranges of -0.5 to 0.5.
+This value is added to the alpha of each class to give it more or less weight
+as appropriate.
+
+--------------------------------------------------------------------------------
+
+To start training, enter the terminal,
+first, enter the virtual environment where we have
+all the dependencies:
+conda activate (name of the virtual environment)
+
+NOTE: I used: conda activate unetpytorch
+
+And access the folder where we have the address:
+cd ../transunet_pytorch/
+NOTE: My address was: cd /home/graciela/Adrian/TransUnet/transunet_pytorch/
+
+Once in the folder, we will run the following command in the terminal:
+python main.py --mode train --model_path ../transunet_pytorch/model/model1/pth --train_path ../transunet_pytorch/trainset --test_path ../transunet_pytorch/testset
+
+NOTE: The address I used is as follows:
+python main.py --mode train --model_path /home/graciela/Adrian/TransUnet/transunet_pytorch/model/model1.pth --train_path /home/graciela/Adrian/TransUnet/transunet_pytorch/trainset --test_path /home/graciela/Adrian/TransUnet/transunet_pytorch/testset
+
+When the training is finished, we can use the following command
+in the terminal to obtain inference images:
+python main.py --mode inference --model_path ../transunet_pytorch/model1.pth -- image_path ../path a tu base de datos de test
+
+NOTE: The address I used is as follows:
+python main.py --mode inference --model_path /home/graciela/Adrian/TransUnet/transunet_pytorch/model/model1.pth --image_path /home/graciela/MCTrans/data/medical/pannuke/split-images-npy/2/
+o
+python main.py --mode inference --model_path /home/graciela/Adrian/TransUnet/transunet_pytorch/model/model1.pth --image_path /home/graciela/Adrian/Inferencia_FFTU/
