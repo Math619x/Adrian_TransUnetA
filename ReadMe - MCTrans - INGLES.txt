@@ -1,10 +1,10 @@
-Install MCTrans
+The base models were implemented in a previous Github repository. We followed the instructions provided in that repository to implement them. 
 
 Create a virtual environment and install the following packages:
 (they can be placed in a requirements file)
 
+conda create -n mctrans pip python=3.9
 
-conda create -n mctrans pip python=3.7
 conda activate mctrans
 git clone https://github.com/JiYuanFeng/MCTrans.git
 cd MCTrans
