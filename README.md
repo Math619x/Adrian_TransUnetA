@@ -1,12 +1,12 @@
-# Adrian_AFFL-TransUnetA
+# Adrian_FF-TransUnet
 
 La carpeta de MCTrans-master, contiene el modelo MCTrans junto con otros modelos de segmentación.
-La carpeta AFFL-TransUnet, contiene unicamente el modelo propuesto, que esta basado en un modelo TransUnet
+La carpeta FF-TransUnet, contiene unicamente el modelo propuesto, que esta basado en un modelo TransUnet
 
 
 
 
-
+Implementación de FF-TransUNet para segmentación de órganos abdominales en MRI T1 con CHAOS, usando pérdida focal y ajuste difuso de α.
 
 
 
